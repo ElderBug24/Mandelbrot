@@ -1,0 +1,24 @@
+x33554432
+750+D
+
+Single Threaded:
+1: 27.77s
+2: 27.93s
+3: 27.75s
+Avg: 27.81s
+
+2 Threads:
+1: 14.70s
+2: 14.45s
+3: 14.69s
+Avg: 14.61s
+
+2 Threads + progress bar:
+1: 14.66
+2: 14.70
+3: 14.73
+Avg: 14.69s
+
+Conclusions:
+The 2 Threaded version takes 52.53% of the time it takes the single threaded version to finish.
+The 2 Threaded version takes 52.82% of the time it takes the single threaded version to finish.
