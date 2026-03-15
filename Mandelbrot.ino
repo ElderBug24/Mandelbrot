@@ -3,6 +3,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_task_wdt.h"
+#include "SD.h"
 
 #include <cmath>
 #include <cfloat>
@@ -63,6 +64,7 @@ const uint16_t black = M5Cardputer.Display.color565(  0,   0,   0);
 const uint16_t white = M5Cardputer.Display.color565(255, 255, 255);
 const uint16_t red   = M5Cardputer.Display.color565(255,  80,  80);
 const uint16_t green = M5Cardputer.Display.color565( 21, 245, 186);
+const uint16_t blue  = M5Cardputer.Display.color565( 49, 111, 234);
 const uint8_t PALETTES_COUNT = 5;
 uint16_t palettes[PALETTES_COUNT][256];
 
@@ -320,6 +322,78 @@ void writeAxis(int dx, int dy, unsigned int detail, int detail_size, uint16_t co
   }
 }
 
+int saveScreenshot(const char* filename) {
+  int w = M5Cardputer.Display.width();
+  int h = M5Cardputer.Display.height();
+
+  File file = SD.open(filename, FILE_WRITE);
+  if (!file) {
+    return 1;
+  }
+
+  uint32_t fileSize = 54 + w * h * 3;
+
+  uint8_t bmpHeader[54] = {
+    'B','M',
+    fileSize, fileSize>>8, fileSize>>16, fileSize>>24,
+    0,0,0,0,
+    54,0,0,0,
+    40,0,0,0,
+    w, w>>8, w>>16, w>>24,
+    h, h>>8, h>>16, h>>24,
+    1,0,
+    24,0,
+    0,0,0,0,
+    0,0,0,0,
+    0,0,0,0,
+    0,0,0,0,
+    0,0,0,0,
+    0,0,0,0
+  };
+
+  file.write(bmpHeader, 54);
+
+  for (int y = h-1; y >= 0; y--) {
+    for (int x = 0; x < w; x++) {
+      RGBColor c = M5Cardputer.Display.readPixelRGB(x, y);
+
+      uint8_t r = c.r;
+      uint8_t g = c.g;
+      uint8_t b = c.b;
+
+      file.write(b);
+      file.write(g);
+      file.write(r);
+    }
+  }
+
+  file.close();
+
+  return 0;
+}
+
+uint16_t findHighestScreenshot() {
+  uint16_t highest = 0;
+
+  File root = SD.open("/");
+  if (!root) return 0;
+
+  File file = root.openNextFile();
+  while (file) {
+    String name = file.name();
+    if (name.startsWith("screenshot") && name.endsWith(".bmp")) {
+      uint16_t num = name.substring(10, name.length() - 4).toInt();
+      if (num > highest && num <= 255) {
+        highest = (uint16_t)num;
+      }
+    }
+    file = root.openNextFile();
+  }
+  root.close();
+
+  return highest;
+}
+
 TaskHandle_t workerHandle;
 TaskHandle_t loopHandle;
 
@@ -445,6 +519,11 @@ void setup() {
   esp_task_wdt_deinit();
   M5Cardputer.begin(M5.config());
   M5Cardputer.Power.begin();
+
+  Serial.begin(115200);
+  if (!SD.begin()) {
+    Serial.println("SD card failed");
+  }
 
   loopHandle = xTaskGetCurrentTaskHandle();
   xTaskCreate(workerTask, "Worker", 1024, nullptr, 1, &workerHandle);
@@ -1023,6 +1102,13 @@ void loop() {
 
         block_render = false;
       }
+    } else if (M5Cardputer.Keyboard.isKeyPressed('q')) { // screenshot
+      uint16_t n = findHighestScreenshot();
+      char filename[32];
+      snprintf(filename, sizeof(filename), "/screenshot%u.bmp", n+1);
+
+      int r = saveScreenshot(filename);
+      M5Cardputer.Display.fillCircle(WIDTH-9, 9, 4, blue);
     } else if (M5Cardputer.Keyboard.isKeyPressed('j')) { // Julia mode
       julia = !julia;
       if (julia) {
@@ -1117,8 +1203,8 @@ void loop() {
           next_frame_x = -0.7981594801;
           next_frame_y = 0.1794066280;
         } else if (M5Cardputer.Keyboard.isKeyPressed('6')) {
-          next_frame_x = -0.6367543340;
-          next_frame_y = -0.6850312948;
+          // next_frame_x = -0.6367543340;
+          // next_frame_y = -0.6850312948;
           next_frame_x = 0.26711215318732706159;
           next_frame_y = -0.0043170512292552603;
         } else if (M5Cardputer.Keyboard.isKeyPressed('7')) {

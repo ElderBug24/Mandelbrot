@@ -6,7 +6,7 @@ The program gives plenty of options and modes to render a visual of the mandelbr
 It also is able to show the Julia set (https://en.wikipedia.org/wiki/Julia_set) associated with the point at the center of the screen.
 
 # Controls
-The program allows the user to move around the camera on the set, zoom in and out, as well as toggle different calculation / coloring algorithms.
+The program allows the user to move around the camera on the set, zoom in and out, as well as toggle different calculation / coloring algorithms and take screenshots.
 
 ## Movement / basic features
  The orange arrows in the bottom right (',' '.' '/' ';') allow for the camera to move respectively left, down, right or up, by 0.166 / [the current zoom]
@@ -18,6 +18,7 @@ The program allows the user to move around the camera on the set, zoom in and ou
    + Note that a green 'crosshair' will allow the user to visualize the new frame and zoom level, showing precisely what will be visible and what won't
    + Also if the zoom level display mode is on, the current zoom level as well as the quotient of the current zoom by the one before the render blocking mode was toggled on
  - Enter ('&#8629;' on the keyboard) will cancel the render blocking mode and go back the the previous position and zoom level. Will not do anything if the render blocking mode was not on.
+ - 'q' takes a screenshot and saves it on the SD card under the name 'screenshot<n>.bmp', where <n> is determined so that the user can keep taking screenshots.
  - Points: the numbers from 0 to 9 and the Esc key ('`') each will teleport the camera to a different point on the complex plane:
    - Esc -> (0, 0), the origin of the complex plane
    - 1 -> (-0.75, 0), which is the default point when starting the program, as we can see the whole set from there
@@ -52,6 +53,7 @@ A dot is sometimes displayed in the top right corner of the screen:
  - Red when the render is blocked
  - Green when the program is computing
  - White when the program is coloring the results
+ - Blue when a screenshot was just taken. The dot is not on the screenshot and will go away whenever the screen gets updated.
 
 The program uses two threads to speed up calculations and this is the reason that two progress bars are displayed at the bottom: one for each thread and the computing time may differ because some parts of the screen will take different times to compute
 
