@@ -520,10 +520,7 @@ void setup() {
   M5Cardputer.begin(M5.config());
   M5Cardputer.Power.begin();
 
-  Serial.begin(115200);
-  if (!SD.begin()) {
-    Serial.println("SD card failed");
-  }
+  SD.begin;
 
   loopHandle = xTaskGetCurrentTaskHandle();
   xTaskCreate(workerTask, "Worker", 1024, nullptr, 1, &workerHandle);
