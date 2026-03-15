@@ -57,6 +57,19 @@ A dot is sometimes displayed in the top right corner of the screen:
 
 The program uses two threads to speed up calculations and this is the reason that two progress bars are displayed at the bottom: one for each thread and the computing time may differ because some parts of the screen will take different times to compute
 
-# Images
-![Alt text](./photos/flowers.webp?raw=true "Queen Anne’s Lace (Daucus carota)")
+# Screenshots / Images
+Of course the screenshots are low quality, the screen resolution is 240 x 135.
 
+![Alt text](./screenshots/screenshot1.bmp?raw=true "Default view")
+
+![Alt text](./screenshots/screenshot2.bmp?raw=true "Point 2")
+
+![Alt text](./screenshots/screenshot3.bmp?raw=true)
+
+![Alt text](./screenshots/screenshot4.bmp?raw=true)
+
+![Alt text](./screenshots/screenshot5.bmp?raw=true "Coordinates")
+
+![Alt text](./screenshots/screenshot6.bmp?raw=true "Axis, iterations count display and battery")
+
+![Alt text](./photos/flowers.webp?raw=true "Queen Anne’s Lace (Daucus carota)")
