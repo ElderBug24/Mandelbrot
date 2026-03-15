@@ -54,3 +54,7 @@ A dot is sometimes displayed in the top right corner of the screen:
  - White when the program is coloring the results
 
 The program uses two threads to speed up calculations and this is the reason that two progress bars are displayed at the bottom: one for each thread and the computing time may differ because some parts of the screen will take different times to compute
+
+# Images
+![Alt text](./photos/flowers.webp?raw=true "Queen Anne’s Lace (Daucus carota)")
+
